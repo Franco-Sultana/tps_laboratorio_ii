@@ -23,7 +23,7 @@ namespace Entidades
         string chasis;
         ConsoleColor color;
 
-        protected Vehiculo(string chasis, EMarca marca, ConsoleColor color)
+        public Vehiculo(string chasis, EMarca marca, ConsoleColor color)
         {
             this.marca = marca;
             this.chasis = chasis;
