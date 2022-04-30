@@ -11,7 +11,7 @@ namespace TP_02_2018
     {
         static void Main(string[] args)
         {
-            // Configuración de la pantalla
+            // Configuración de la pantalla - Lucas
             Console.SetWindowPosition(0, 0);
             Console.SetWindowSize(Console.LargestWindowWidth / 2, Console.LargestWindowHeight - 2);
 
