@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPersona xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Persona>
+    <NombreCompleto>hrhrh</NombreCompleto>
+    <Dni>346</Dni>
+    <Edad>6</Edad>
+    <Sexo>SinEspecificar</Sexo>
+    <DiaCobrado>2022-06-05T13:00:30.8033743-03:00</DiaCobrado>
+    <Servicio>ClaseCrossfit</Servicio>
+  </Persona>
+</ArrayOfPersona>
