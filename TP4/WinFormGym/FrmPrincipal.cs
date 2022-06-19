@@ -61,7 +61,7 @@ namespace WinFormGym
         {
             try
             {
-                Persona aux = listaPersonas.Lista.ElementAt(lstClientes.SelectedIndex);
+                Persona aux = (Persona)lstClientes.SelectedItem;
                 FrmVentaProductos frmVenta = new();
                 frmVenta.ShowDialog();
             }
@@ -82,7 +82,8 @@ namespace WinFormGym
             try
             {
                 PersonaDAO pDAO = new();
-                Persona aux = listaPersonas.Lista.ElementAt(lstClientes.SelectedIndex);
+                Persona aux = (Persona)lstClientes.SelectedItem;
+
                 if (aux.CobrarServicio())
                 {
                     MessageBox.Show($"Se cobró {aux.Servicio} para el cliente", "Informacion", MessageBoxButtons.OK);
@@ -130,7 +131,8 @@ namespace WinFormGym
             {
                 PersonaDAO pDAO = new();
                 Persona aux = (Persona)lstClientes.SelectedItem;
-                informe.OnNotificarBaja += aux.RecibirNotificacionBaja;
+
+                SuscribirAlEvento(aux);
 
                 informe.EnviarNotificacionBaja();
                 MessageBox.Show("Se dio de baja el cliente con éxito", "Baja de cliente", MessageBoxButtons.OK);
@@ -160,6 +162,17 @@ namespace WinFormGym
             }
         }
 
+        private void SuscribirAlEvento(Persona p)
+        {
+            foreach (Persona item in this.listaPersonas.Lista)
+            {
+                if(p == item)
+                {
+                informe.OnNotificarBaja += item.RecibirNotificacionBaja;
+                }
+            }
+        }
+
         /// <summary>
         /// Abre el formulario de altas.
         /// </summary>
@@ -167,27 +180,21 @@ namespace WinFormGym
         /// <param name="e"></param>
         private void btnAlta_Click(object sender, EventArgs e)
         {
-            FrmAlta frmAlta = new(listaPersonas);
+            Gym<Persona> aux = new();
+            FrmAlta frmAlta = new(aux);
             if(frmAlta.ShowDialog() == DialogResult.OK)
             {
                 PersonaDAO pDAO = new();
                 try
                 {
-                    lstClientes.Items.Clear();
-                    List<Persona> listaAux = pDAO.Leer(true);
-                    if (listaAux != null)
+                    
+                    foreach (Persona item in aux.Lista)
                     {
-                        foreach (Persona item in listaAux)
-                        {
-                            
-                            listaPersonas.Agregar(item);
-                        }
-                        foreach (Persona item in this.listaPersonas.Lista)
-                        {
-                            pDAO.Guardar(item);
-                            this.lstClientes.Items.Add(item);
-                        }
+                        pDAO.Guardar(item);
+                        this.lstClientes.Items.Add(item);
+                        this.listaPersonas.Agregar(item);
                     }
+                    
                 }
                 catch (SqlExcepcion ex)
                 {

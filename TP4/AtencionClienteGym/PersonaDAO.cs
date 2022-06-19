@@ -29,20 +29,20 @@ namespace Entidades
         {
             try
             {
-                string query = "INSERT INTO PERSONAS (DNI,NOMBRE_COMPLETO,EDAD,SEXO,DIA_COBRADO,SERVICIO,ACTIVO) VALUES (@DNI,@NOMBRE,@EDAD,@SEXO,@DIA,@SERVICIO,@ACTIVO)";
-                this.comando = new(query, this.conexion);
-                this.comando.Parameters.AddWithValue("@DNI",p.Dni);
-                this.comando.Parameters.AddWithValue("@NOMBRE",p.NombreCompleto);
-                this.comando.Parameters.AddWithValue("@EDAD",p.Edad);
-                this.comando.Parameters.AddWithValue("@SEXO",p.Sexo);
-                this.comando.Parameters.AddWithValue("@DIA",p.DiaCobrado);
-                this.comando.Parameters.AddWithValue("@SERVICIO",p.Servicio);
-                this.comando.Parameters.AddWithValue("@ACTIVO",true);
-                this.conexion.Open();
-                this.comando.ExecuteNonQuery();
+                    string query = "INSERT INTO PERSONAS (DNI,NOMBRE_COMPLETO,EDAD,SEXO,DIA_COBRADO,SERVICIO,ACTIVO) VALUES (@DNI,@NOMBRE,@EDAD,@SEXO,@DIA,@SERVICIO,@ACTIVO)";
+                    this.comando = new(query, this.conexion);
+                    this.comando.Parameters.AddWithValue("@DNI",p.Dni);
+                    this.comando.Parameters.AddWithValue("@NOMBRE",p.NombreCompleto);
+                    this.comando.Parameters.AddWithValue("@EDAD",p.Edad);
+                    this.comando.Parameters.AddWithValue("@SEXO",p.Sexo);
+                    this.comando.Parameters.AddWithValue("@DIA",p.DiaCobrado);
+                    this.comando.Parameters.AddWithValue("@SERVICIO",p.Servicio);
+                    this.comando.Parameters.AddWithValue("@ACTIVO",true);
+                    this.conexion.Open();
+                    this.comando.ExecuteNonQuery();
                 
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 throw new SqlExcepcion("Error en la base de datos");
             }
@@ -68,7 +68,7 @@ namespace Entidades
                 this.conexion.Open();
                 this.comando.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 throw new SqlExcepcion("Error en la base de datos");
             }
@@ -104,7 +104,7 @@ namespace Entidades
                     lista.Add(new Persona(nombre, dni, edad, (eSexo)sexo, diaCobrado, (eServicio)servicio));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new SqlExcepcion("Error en la base de datos");
             }

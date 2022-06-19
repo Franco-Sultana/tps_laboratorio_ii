@@ -8,12 +8,12 @@ namespace Entidades
 {
     public static class ExtensionPersona
     {
-        public static void RecibirNotificacionBaja(this Persona p, InformeClienteDadoDeBaja sender)
+
+        public static void RecibirNotificacionBaja(this Persona p,InformeClienteDadoDeBaja sender)
         {
             PersonaDAO pbDAO = new();
             pbDAO.Modificar(false, p);
         }
-
         public static string MostrarBaja(this InformeClienteDadoDeBaja info, Persona p)
         {
             StringBuilder sb = new();

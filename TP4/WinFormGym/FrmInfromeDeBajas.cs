@@ -28,7 +28,6 @@ namespace WinFormGym
         {
             PersonaDAO pDAO = new();
             List<Persona> listaAux = new();
-           // listaAux.Clear();
             listaAux = pDAO.Leer(false);
             foreach (Persona item in listaAux)
             {
@@ -39,47 +38,56 @@ namespace WinFormGym
 
         private void btnRecuperarCliente_Click(object sender, EventArgs e)
         {
-            PersonaDAO pDAO = new();
-            Persona aux = listaPersonasBaja.Lista.ElementAt(lstClientesDadosDeBaja.SelectedIndex);
-           // DesuscribirDeEvento(listaPersonas.Lista, aux);
-            informe.OnNotificarBaja -= aux.RecibirNotificacionBaja;
-            TimeSpan tiempoPasado = aux.DiaCobrado - DateTime.Now;
-            if(tiempoPasado.Days > 30)
+            try
             {
-                aux.ActualizarPago();
-            }
-            else
-            {
-                MessageBox.Show($"El cliente pagó la mensualidad el dia {aux.DiaCobrado.ToShortDateString()}, por lo tanto tiene el mes cubierto");
-            }
+                PersonaDAO pDAO = new();
+                Persona aux = listaPersonasBaja.Lista.ElementAt(lstClientesDadosDeBaja.SelectedIndex);
+                this.DesuscribirDelEvento(aux);
 
-            pDAO.Modificar(true, aux);
-            if (MessageBox.Show("Se recuperó al cliente", "Cliente recuperado", MessageBoxButtons.OK) == DialogResult.OK)
-            {
-                lstClientesDadosDeBaja.Items.Clear();
-                listaPersonasBaja.Remover(aux);
-                foreach (Persona item in listaPersonasBaja.Lista)
+                pDAO.Modificar(true, aux);
+                if (MessageBox.Show("Se recuperó al cliente", "Cliente recuperado", MessageBoxButtons.OK) == DialogResult.OK)
                 {
-                    lstClientesDadosDeBaja.Items.Add(informe.MostrarBaja(item));
+                    lstClientesDadosDeBaja.Items.Clear();
+                    listaPersonasBaja.Remover(aux);
+                    foreach (Persona item in listaPersonasBaja.Lista)
+                    {
+                        lstClientesDadosDeBaja.Items.Add(informe.MostrarBaja(item));
+                    }
                 }
             }
-        }
-
-        public void DesuscribirDeEvento(List<Persona> lista, Persona p)
-        {
-            foreach (Persona item in lista)
+            catch(ArgumentOutOfRangeException )
             {
-                if(item.Dni == p.Dni)
-                {
-                    informe.OnNotificarBaja -= item.RecibirNotificacionBaja;
-                    item.DiaCobrado = DateTime.Now;
-                }
+                MessageBox.Show("No de click sobre el espacio en blanco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-        }
+            catch(Exception)
+            {
+                MessageBox.Show("Ocurrió un error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
 
+        }
         private void btnCerrarInformeBajas_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void DesuscribirDelEvento(Persona p)
+        {
+            TimeSpan tiempoPasado = p.DiaCobrado - DateTime.Now;
+            foreach (Persona item in listaPersonas.Lista)
+            {
+                if(item == p)
+                {
+                    informe.OnNotificarBaja -= item.RecibirNotificacionBaja;
+                    if (tiempoPasado.Days > 30)
+                    {
+                        item.ActualizarPago();
+                    }
+                    else
+                    {
+                        MessageBox.Show($"El cliente pagó la mensualidad el dia {item.DiaCobrado.ToShortDateString()}, por lo tanto tiene el mes cubierto");
+                    }
+                }
+            }
         }
 
         private void FrmInfromeDeBajas_FormClosed(object sender, FormClosedEventArgs e)

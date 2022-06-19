@@ -112,5 +112,7 @@ namespace Entidades
             sb.AppendLine($"DIA COBRADO: {this.diaCobrado.ToShortDateString()}");
             return sb.ToString();
         }
+
+    
     }
 }
