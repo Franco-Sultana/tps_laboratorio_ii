@@ -9,19 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Entidades;
 using Archivos;
-using System.IO;
-using System.Diagnostics;
 
 namespace WinFormGym
 {
     public partial class FrmReclamos : Form
     {
         Persona persona;
-        public FrmReclamos(Persona p, bool estaEnOscuro)
+        public FrmReclamos(Persona p)
         {
             InitializeComponent();
             this.persona = p;
-            FrmPrincipal.MostrarEnModo(estaEnOscuro, this);
         }
 
         private void btnEnviarRtaReclamo_Click(object sender, EventArgs e)
@@ -38,29 +35,12 @@ namespace WinFormGym
 
                 sb.AppendLine("=========================================");
 
-                ArchivoTxt.Escribir("ReclamosAtendidos.txt", sb.ToString());
+                ArchivoTxt.Escribir("ReclamosAtendidos", sb.ToString());
                 MessageBox.Show("Se envió el mensaje", "Información", MessageBoxButtons.OK);
 
                 this.DialogResult = DialogResult.OK;
             }
             
-        }
-
-        private void btnCancelarReclamo_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnVerRtasEnviadas_Click(object sender, EventArgs e)
-        {
-            Process p = new Process();
-
-            p.StartInfo = new ProcessStartInfo(AppDomain.CurrentDomain.BaseDirectory + "ReclamosAtendidos.txt")
-            {
-                UseShellExecute = true
-            };
-                
-            p.Start();
         }
     }
 }

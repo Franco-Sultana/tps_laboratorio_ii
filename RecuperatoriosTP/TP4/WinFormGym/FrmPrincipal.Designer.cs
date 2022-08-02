@@ -38,16 +38,16 @@ namespace WinFormGym
             this.btnAlta = new System.Windows.Forms.Button();
             this.lblClientes = new System.Windows.Forms.Label();
             this.btnInformeBajas = new System.Windows.Forms.Button();
-            this.btnCambiarModo = new System.Windows.Forms.Button();
+            this.lblRecuperandoInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lstClientes
             // 
             this.lstClientes.FormattingEnabled = true;
             this.lstClientes.ItemHeight = 15;
-            this.lstClientes.Location = new System.Drawing.Point(-2, 32);
+            this.lstClientes.Location = new System.Drawing.Point(-2, 17);
             this.lstClientes.Name = "lstClientes";
-            this.lstClientes.Size = new System.Drawing.Size(1067, 424);
+            this.lstClientes.Size = new System.Drawing.Size(1067, 439);
             this.lstClientes.TabIndex = 0;
             // 
             // btnVenderProducto
@@ -113,7 +113,7 @@ namespace WinFormGym
             // lblClientes
             // 
             this.lblClientes.AutoSize = true;
-            this.lblClientes.Location = new System.Drawing.Point(12, 9);
+            this.lblClientes.Location = new System.Drawing.Point(12, -1);
             this.lblClientes.Name = "lblClientes";
             this.lblClientes.Size = new System.Drawing.Size(52, 15);
             this.lblClientes.TabIndex = 7;
@@ -129,22 +129,20 @@ namespace WinFormGym
             this.btnInformeBajas.UseVisualStyleBackColor = true;
             this.btnInformeBajas.Click += new System.EventHandler(this.btnInformeBajas_Click);
             // 
-            // btnCambiarModo
+            // lblRecuperandoInfo
             // 
-            this.btnCambiarModo.Location = new System.Drawing.Point(933, 5);
-            this.btnCambiarModo.Name = "btnCambiarModo";
-            this.btnCambiarModo.Size = new System.Drawing.Size(120, 23);
-            this.btnCambiarModo.TabIndex = 9;
-            this.btnCambiarModo.Text = "Modo oscuro";
-            this.btnCambiarModo.UseVisualStyleBackColor = true;
-            this.btnCambiarModo.Click += new System.EventHandler(this.btnCambiarModo_Click);
+            this.lblRecuperandoInfo.Location = new System.Drawing.Point(773, -1);
+            this.lblRecuperandoInfo.Name = "lblRecuperandoInfo";
+            this.lblRecuperandoInfo.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lblRecuperandoInfo.Size = new System.Drawing.Size(277, 15);
+            this.lblRecuperandoInfo.TabIndex = 9;
             // 
             // FrmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1062, 501);
-            this.Controls.Add(this.btnCambiarModo);
+            this.Controls.Add(this.lblRecuperandoInfo);
             this.Controls.Add(this.btnInformeBajas);
             this.Controls.Add(this.lblClientes);
             this.Controls.Add(this.btnAlta);
@@ -174,6 +172,6 @@ namespace WinFormGym
         private System.Windows.Forms.Button btnAlta;
         private System.Windows.Forms.Label lblClientes;
         private System.Windows.Forms.Button btnInformeBajas;
-        private System.Windows.Forms.Button btnCambiarModo;
+        private System.Windows.Forms.Label lblRecuperandoInfo;
     }
 }
