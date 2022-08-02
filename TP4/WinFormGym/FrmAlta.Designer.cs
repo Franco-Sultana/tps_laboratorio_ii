@@ -37,12 +37,12 @@ namespace WinFormGym
             this.lblDni = new System.Windows.Forms.Label();
             this.lblEdad = new System.Windows.Forms.Label();
             this.lblSexo = new System.Windows.Forms.Label();
-            this.grpAgregarAMano = new System.Windows.Forms.GroupBox();
             this.cmbServicio = new System.Windows.Forms.ComboBox();
             this.lblServicio = new System.Windows.Forms.Label();
             this.btnAgregarManoArch = new System.Windows.Forms.Button();
             this.btnAceptarAltaArch = new System.Windows.Forms.Button();
             this.btnAtrasAlta = new System.Windows.Forms.Button();
+            this.grpAgregarAMano = new System.Windows.Forms.GroupBox();
             this.grpAgregarAMano.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,26 +112,6 @@ namespace WinFormGym
             this.lblSexo.TabIndex = 7;
             this.lblSexo.Text = "SEXO: ";
             // 
-            // grpAgregarAMano
-            // 
-            this.grpAgregarAMano.Controls.Add(this.cmbServicio);
-            this.grpAgregarAMano.Controls.Add(this.lblServicio);
-            this.grpAgregarAMano.Controls.Add(this.btnAgregarManoArch);
-            this.grpAgregarAMano.Controls.Add(this.lblNombre);
-            this.grpAgregarAMano.Controls.Add(this.lblSexo);
-            this.grpAgregarAMano.Controls.Add(this.txtNombreCliente);
-            this.grpAgregarAMano.Controls.Add(this.lblEdad);
-            this.grpAgregarAMano.Controls.Add(this.txtDni);
-            this.grpAgregarAMano.Controls.Add(this.lblDni);
-            this.grpAgregarAMano.Controls.Add(this.txtEdad);
-            this.grpAgregarAMano.Controls.Add(this.cmbSexo);
-            this.grpAgregarAMano.Location = new System.Drawing.Point(12, 12);
-            this.grpAgregarAMano.Name = "grpAgregarAMano";
-            this.grpAgregarAMano.Size = new System.Drawing.Size(407, 207);
-            this.grpAgregarAMano.TabIndex = 8;
-            this.grpAgregarAMano.TabStop = false;
-            this.grpAgregarAMano.Text = "Añadir cliente a mano";
-            // 
             // cmbServicio
             // 
             this.cmbServicio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -180,6 +160,26 @@ namespace WinFormGym
             this.btnAtrasAlta.UseVisualStyleBackColor = true;
             this.btnAtrasAlta.Click += new System.EventHandler(this.btnCancelarAlta_Click);
             // 
+            // grpAgregarAMano
+            // 
+            this.grpAgregarAMano.Controls.Add(this.cmbServicio);
+            this.grpAgregarAMano.Controls.Add(this.lblServicio);
+            this.grpAgregarAMano.Controls.Add(this.btnAgregarManoArch);
+            this.grpAgregarAMano.Controls.Add(this.lblNombre);
+            this.grpAgregarAMano.Controls.Add(this.lblSexo);
+            this.grpAgregarAMano.Controls.Add(this.txtNombreCliente);
+            this.grpAgregarAMano.Controls.Add(this.lblEdad);
+            this.grpAgregarAMano.Controls.Add(this.txtDni);
+            this.grpAgregarAMano.Controls.Add(this.lblDni);
+            this.grpAgregarAMano.Controls.Add(this.txtEdad);
+            this.grpAgregarAMano.Controls.Add(this.cmbSexo);
+            this.grpAgregarAMano.Location = new System.Drawing.Point(12, 12);
+            this.grpAgregarAMano.Name = "grpAgregarAMano";
+            this.grpAgregarAMano.Size = new System.Drawing.Size(407, 207);
+            this.grpAgregarAMano.TabIndex = 8;
+            this.grpAgregarAMano.TabStop = false;
+            this.grpAgregarAMano.Text = "Añadir cliente a mano";
+            // 
             // FrmAlta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -207,11 +207,11 @@ namespace WinFormGym
         private System.Windows.Forms.Label lblDni;
         private System.Windows.Forms.Label lblEdad;
         private System.Windows.Forms.Label lblSexo;
-        private System.Windows.Forms.GroupBox grpAgregarAMano;
         private System.Windows.Forms.Button btnAceptarAltaArch;
         private System.Windows.Forms.Button btnAtrasAlta;
         private System.Windows.Forms.Button btnAgregarManoArch;
         private System.Windows.Forms.Label lblServicio;
         private System.Windows.Forms.ComboBox cmbServicio;
+        private System.Windows.Forms.GroupBox grpAgregarAMano;
     }
 }

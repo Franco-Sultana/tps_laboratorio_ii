@@ -21,14 +21,18 @@ namespace Archivos
 
         public static void Escribir(T datos, string nombre)
         {
-            string nombreArchivo = path + "SerializandoJson_" + nombre + ".json";
-            Directory.CreateDirectory(path);
+            string nombreArchivo = path + nombre;
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path); 
+            }
+           
             StreamWriter sw = null;
             try
             {
                 sw = new StreamWriter(nombreArchivo);
                 sw.WriteLine(JsonSerializer.Serialize(datos));
-            sw.Close();
 
             }
             catch(Exception ex)

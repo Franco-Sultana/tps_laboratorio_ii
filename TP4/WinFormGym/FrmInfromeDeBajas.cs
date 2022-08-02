@@ -14,18 +14,21 @@ namespace WinFormGym
 {
     public partial class FrmInfromeDeBajas : Form
     {
+        private bool estaEnOscuro;
         Gym<Persona> listaPersonasBaja;
         Gym<Persona> listaPersonas;
         InformeClienteDadoDeBaja informe;
-        public FrmInfromeDeBajas(Gym<Persona> listaPersonas, InformeClienteDadoDeBaja informe)
+        public FrmInfromeDeBajas(Gym<Persona> listaPersonas, InformeClienteDadoDeBaja informe, bool estaEnOscuro)
         {
             InitializeComponent();
             this.listaPersonasBaja = new();
             this.listaPersonas = listaPersonas;
             this.informe = informe;
+            this.estaEnOscuro = estaEnOscuro;
         }
         private void FrmInfromeDeBajas_Load(object sender, EventArgs e)
         {
+            FrmPrincipal.MostrarEnModo(this.estaEnOscuro, this);
             PersonaDAO pDAO = new();
             List<Persona> listaAux = new();
             listaAux = pDAO.Leer(false);
@@ -57,7 +60,7 @@ namespace WinFormGym
             }
             catch(ArgumentOutOfRangeException )
             {
-                MessageBox.Show("No de click sobre el espacio en blanco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Debe seleccionar un cliente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             catch(Exception)
             {
