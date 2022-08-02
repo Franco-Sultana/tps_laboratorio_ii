@@ -12,12 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="SerializandoJson_Json_AccesoriosGym.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SerializandoJson_Json_IndumentariaGym.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Xml_ClientesYaCargadosGym">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

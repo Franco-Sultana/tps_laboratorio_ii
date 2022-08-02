@@ -9,26 +9,29 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Entidades;
 using Archivos;
-
+using System.Threading;
 
 namespace WinFormGym
 {
     public partial class FrmVentaProductos : Form
     {
+        private bool estaEnOscuro;
+
         Gym<IVenta> listaProductos;
-        public FrmVentaProductos()
+        public FrmVentaProductos(bool estaEnOscuro)
         {
             InitializeComponent();
             this.listaProductos = new();
+            this.estaEnOscuro = estaEnOscuro;
         }
 
         private void VentaProductos_Load(object sender, EventArgs e)
         {
             try
             {
-
-                List<AccesoriosDeportivos> listaAuxAccesorios = ClaseSerializadoraJson<List<AccesoriosDeportivos>>.Leer("SerializandoJson_Json_AccesoriosGym");
-                List<IndumentariaDeportiva> listaAuxIndumentaria = ClaseSerializadoraJson<List<IndumentariaDeportiva>>.Leer("SerializandoJson_Json_IndumentariaGym");
+                FrmPrincipal.MostrarEnModo(estaEnOscuro, this);
+                List<AccesoriosDeportivos> listaAuxAccesorios = ClaseSerializadoraJson<List<AccesoriosDeportivos>>.Leer("SerializandoJson_AccesoriosDeportivos.json");
+                List<IndumentariaDeportiva> listaAuxIndumentaria = ClaseSerializadoraJson<List<IndumentariaDeportiva>>.Leer("SerializandoJson_IndumentariaDeportiva.json");
 
 
                 foreach (IndumentariaDeportiva item in listaAuxIndumentaria)
@@ -55,9 +58,9 @@ namespace WinFormGym
 
         private void btnVender_Click(object sender, EventArgs e)
         {
-
             try
             {
+
                 Producto productoAux = (Producto)listaProductos.Lista.ElementAt(lstProductos.SelectedIndex);
 
                 if (this.txtCantidadVender.Text == String.Empty)
@@ -80,11 +83,12 @@ namespace WinFormGym
                     {
                         lstProductos.Items.Add(item);
                         auxI.Add((IndumentariaDeportiva)item);
-                    }                  
+                    }
                 }
                 ArchivoTxt.Escribir("DetallesVentas", ((IVenta)productoAux).DetallarVenta());
-                ClaseSerializadoraJson<List<AccesoriosDeportivos>>.Escribir(auxA, "Json_AccesoriosGym");
-                ClaseSerializadoraJson<List<IndumentariaDeportiva>>.Escribir(auxI, "Json_IndumentariaGym");
+                ClaseSerializadoraJson<List<AccesoriosDeportivos>>.Escribir(auxA, "SerializandoJson_AccesoriosDeportivos.json");
+                ClaseSerializadoraJson<List<IndumentariaDeportiva>>.Escribir(auxI, "SerializandoJson_IndumentariaDeportiva.json");
+
             }
             catch (ArchivoExcepcion ex)
             {
@@ -98,16 +102,17 @@ namespace WinFormGym
             {
                 MessageBox.Show("La cantidad de productos debe ser numérica!!!", "Valor inválido", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            catch(SinStockExcepcion ex)
+            catch (SinStockExcepcion ex)
             {
                 MessageBox.Show(ex.Message, "Producto sin stock", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 MessageBox.Show($"Ocurrió un error ({ex.Message})", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
+
 
         private void btnCancelarVenta_Click(object sender, EventArgs e)
         {

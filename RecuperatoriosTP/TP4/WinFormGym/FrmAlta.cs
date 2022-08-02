@@ -16,7 +16,7 @@ namespace WinFormGym
     {
         Gym<Persona> listaPersonas;
         PersonaDAO pDAO;
-        public FrmAlta(Gym<Persona> listaPersonas)
+        public FrmAlta(Gym<Persona> listaPersonas, bool estaEnOscuro)
         {
             InitializeComponent();
             this.listaPersonas = listaPersonas;
@@ -32,6 +32,8 @@ namespace WinFormGym
             cmbServicio.Items.Add("Clases de crossfit");
             cmbServicio.Items.Add("Clases de zumba");
             cmbServicio.Items.Add("Pase libre");
+
+            FrmPrincipal.MostrarEnModo(estaEnOscuro, this);
         }
 
         /// <summary>

@@ -11,12 +11,12 @@ using Entidades;
 using Archivos;
 using System.Threading;
 
-public delegate void DelegadoIniciarFormulario();
 namespace WinFormGym
 {
-   
+
     public partial class FrmPrincipal : Form
     {
+        private bool estaEnModoOscuro;
         private Gym<Persona> listaPersonas;
         private InformeClienteDadoDeBaja informe;
         public FrmPrincipal()
@@ -25,6 +25,9 @@ namespace WinFormGym
 
             this.listaPersonas = new();
             informe = new(DateTime.Now);
+            estaEnModoOscuro = false;
+            
+
         }
 
         private void FrmAtender_Load(object sender, EventArgs e)
@@ -44,7 +47,7 @@ namespace WinFormGym
             }
             catch(ArchivoExcepcion ex)
             {
-                MessageBox.Show(ex.Message, "Error en archivo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.Message, "Error en base de datos", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             catch (Exception ex)
             {
@@ -62,13 +65,20 @@ namespace WinFormGym
             try
             {
                 Persona aux = (Persona)lstClientes.SelectedItem;
-                FrmVentaProductos frmVenta = new();
-                frmVenta.ShowDialog();
+                if (aux is not null)
+                {
+                    FrmVentaProductos frmVenta = new(estaEnModoOscuro);
+                    frmVenta.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un cliente.", "Error: Cliente no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                }
             }
-            catch(ArgumentOutOfRangeException)
+            catch(Exception ex)
             {
-                MessageBox.Show($"Seleccione el cliente al que le quiere vender un producto", "Error: Cliente no seleccionado", MessageBoxButtons.OK, 
-                                                                                                                                MessageBoxIcon.Exclamation);
+                MessageBox.Show($"Ocurrió un error ({ex.Message})", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -83,35 +93,38 @@ namespace WinFormGym
             {
                 PersonaDAO pDAO = new();
                 Persona aux = (Persona)lstClientes.SelectedItem;
-
-                if (aux.CobrarServicio())
+                if (aux is not null)
                 {
-                    MessageBox.Show($"Se cobró {aux.Servicio} para el cliente", "Informacion", MessageBoxButtons.OK);
-                    aux.ActualizarPago();
-                    pDAO.Modificar(true, aux);
-                    lstClientes.Items.Clear();
-                    List<Persona> listaAux = pDAO.Leer(true);
-                    if (listaAux != null)
+                    if (aux.CobrarServicio())
                     {
-                        foreach (Persona item in listaAux)
+                        MessageBox.Show($"Se cobró {aux.Servicio} para el cliente", "Informacion", MessageBoxButtons.OK);
+                        aux.ActualizarPago();
+                        pDAO.Modificar(true, aux);
+                        lstClientes.Items.Clear();
+                        List<Persona> listaAux = pDAO.Leer(true);
+                        if (listaAux != null)
                         {
-                            this.lstClientes.Items.Add(item);
-                            listaPersonas.Agregar(item);
+                            foreach (Persona item in listaAux)
+                            {
+                                this.lstClientes.Items.Add(item);
+                                listaPersonas.Agregar(item);
+                            }
                         }
+                    }
+                    else
+                    {
+                        MessageBox.Show($"El cliente ya pagó el servicio, no lo cagués!!", "Servicio cobrado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
                 else
                 {
-                    MessageBox.Show($"El cliente ya pagó el servicio, no lo cagués!!", "Servicio cobrado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Debe seleccionar un cliente.", "Error: Cliente no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
                 }
             }
             catch (ArchivoExcepcion ex)
             {
                 MessageBox.Show(ex.Message, "Error en archivo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                MessageBox.Show("Debe seleccionar un cliente.", "Error: Cliente no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             catch(Exception ex)
             {
@@ -131,30 +144,33 @@ namespace WinFormGym
             {
                 PersonaDAO pDAO = new();
                 Persona aux = (Persona)lstClientes.SelectedItem;
-
-                SuscribirAlEvento(aux);
-
-                informe.EnviarNotificacionBaja();
-                MessageBox.Show("Se dio de baja el cliente con éxito", "Baja de cliente", MessageBoxButtons.OK);
-
-                lstClientes.Items.Clear();
-                
-                List<Persona> listaAux = pDAO.Leer(true);
-                if (listaAux != null)
+                if (aux is not null)
                 {
-                    foreach (Persona item in listaAux)
+                    SuscribirAlEvento(aux);
+
+                    informe.EnviarNotificacionBaja();
+                    MessageBox.Show("Se dio de baja el cliente con éxito", "Baja de cliente", MessageBoxButtons.OK);
+
+                    lstClientes.Items.Clear();
+
+                    List<Persona> listaAux = pDAO.Leer(true);
+                    if (listaAux != null)
                     {
-                        this.lstClientes.Items.Add(item);                      
-                    }                   
+                        foreach (Persona item in listaAux)
+                        {
+                            this.lstClientes.Items.Add(item);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un cliente.", "Error: Cliente no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
                 }
             }
             catch(SqlExcepcion ex)
             {
                 MessageBox.Show(ex.Message, "Error en base de datos", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                MessageBox.Show("Debe seleccionar un cliente.", "Error: Cliente no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             catch (Exception ex)
             {
@@ -181,7 +197,7 @@ namespace WinFormGym
         private void btnAlta_Click(object sender, EventArgs e)
         {
             Gym<Persona> aux = new();
-            FrmAlta frmAlta = new(aux);
+            FrmAlta frmAlta = new(aux, estaEnModoOscuro);
             if(frmAlta.ShowDialog() == DialogResult.OK)
             {
                 PersonaDAO pDAO = new();
@@ -212,57 +228,43 @@ namespace WinFormGym
             this.Close();
         }
 
-        private async void btnInformeBajas_Click(object sender, EventArgs e)
+        private void btnInformeBajas_Click(object sender, EventArgs e)
         {
-            this.lblRecuperandoInfo.Text = "...Recuperando información";
-            await Task.Run(() => AbrirFormBajas());
-        }
-
-        private void AbrirFormBajas()
-        {
-            try
+            FrmInfromeDeBajas frmInforme = new(listaPersonas, informe,this.estaEnModoOscuro);
+            if (frmInforme.ShowDialog() == DialogResult.OK)
             {
-                if (this.InvokeRequired)
+                PersonaDAO pDAO = new();
+
+                lstClientes.Items.Clear();
+                List<Persona> listaAux = pDAO.Leer(true);
+                if (listaAux != null)
                 {
-                    Task.Delay((new Random()).Next(3000, 6000)).Wait();
-                    DelegadoIniciarFormulario delegado = new(AbrirFormBajas);
-                            
-                    BeginInvoke(delegado);
-                }
-                else
-                {
-                    FrmInfromeDeBajas frmInforme = new(listaPersonas, informe);
-                    if (frmInforme.ShowDialog() == DialogResult.OK)
+                    foreach (Persona item in listaAux)
                     {
-                        PersonaDAO pDAO = new();
-
-                        lstClientes.Items.Clear();
-                        List<Persona> listaAux = pDAO.Leer(true);
-                        if (listaAux != null)
-                        {
-                            foreach (Persona item in listaAux)
-                            {
-                                this.lstClientes.Items.Add(item);
-                                listaPersonas.Agregar(item);
-                            }
-
-                        }
-                        this.lblRecuperandoInfo.Text = "";
+                        this.lstClientes.Items.Add(item);
+                        listaPersonas.Agregar(item);
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
 
+                }
+
+                //this.lblRecuperandoInfo.Text = "";
+            }
+
+        }
         private void btnAtenderReclamo_Click(object sender, EventArgs e)
         {
             try
             {
-                FrmReclamos frmReclamos = new((Persona)lstClientes.SelectedItem);
-                frmReclamos.ShowDialog();
+                Persona p = (Persona)lstClientes.SelectedItem;
+                if(p is not null)
+                {
+                    FrmReclamos frmReclamos = new(p, this.estaEnModoOscuro);
+                    frmReclamos.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un cliente.", "Error: Cliente no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -273,6 +275,61 @@ namespace WinFormGym
                 MessageBox.Show("Ocurrió un error", "Error: Cliente no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
+        }
+
+        private void btnCambiarModo_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                CambiarModo();
+            });
+        }
+
+        private void CambiarModo()
+        {
+            if (this.InvokeRequired)
+            {
+                Action a = new(CambiarModo);
+                Thread.Sleep(new Random().Next(1000, 2500));
+                BeginInvoke(a);
+            }
+            else
+            {
+
+                MostrarEnModo(!estaEnModoOscuro, this);
+                if (this.estaEnModoOscuro)
+                {
+                    estaEnModoOscuro = false;
+                    this.btnCambiarModo.Text = "Modo oscuro";
+                }
+                else
+                {
+                    estaEnModoOscuro = true;
+                    this.btnCambiarModo.Text = "Modo claro";
+
+                }
+            }
+        }
+        public static void MostrarEnModo(bool estaOscuro, Form frm)
+        {
+            if (!estaOscuro)
+            {
+                foreach (Control item in frm.Controls)
+                {
+                    item.BackColor = default;
+                    item.ForeColor = default;
+                }
+                frm.BackColor = default;
+            }
+            else
+            {
+                foreach (Control item in frm.Controls)
+                {
+                    item.BackColor = Color.FromArgb(66, 66, 66);
+                    item.ForeColor = Color.White;
+                }
+                frm.BackColor = Color.FromArgb(33, 33, 33);
+            }
         }
     }
 }

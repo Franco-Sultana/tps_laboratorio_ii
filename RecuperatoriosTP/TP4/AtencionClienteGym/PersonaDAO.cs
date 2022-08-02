@@ -29,15 +29,15 @@ namespace Entidades
         {
             try
             {
-                    string query = "INSERT INTO PERSONAS (DNI,NOMBRE_COMPLETO,EDAD,SEXO,DIA_COBRADO,SERVICIO,ACTIVO) VALUES (@DNI,@NOMBRE,@EDAD,@SEXO,@DIA,@SERVICIO,@ACTIVO)";
+                    string query = "insert into PersonasGym (dni,nombreCompleto,edad,sexo,diaCobrado,servicio,activo) VALUES (@dni,@nombre,@edad,@sexo,@dia,@servicio,@activo)";
                     this.comando = new(query, this.conexion);
-                    this.comando.Parameters.AddWithValue("@DNI",p.Dni);
-                    this.comando.Parameters.AddWithValue("@NOMBRE",p.NombreCompleto);
-                    this.comando.Parameters.AddWithValue("@EDAD",p.Edad);
-                    this.comando.Parameters.AddWithValue("@SEXO",p.Sexo);
-                    this.comando.Parameters.AddWithValue("@DIA",p.DiaCobrado);
-                    this.comando.Parameters.AddWithValue("@SERVICIO",p.Servicio);
-                    this.comando.Parameters.AddWithValue("@ACTIVO",true);
+                    this.comando.Parameters.AddWithValue("@dni",p.Dni);
+                    this.comando.Parameters.AddWithValue("@nombre",p.NombreCompleto);
+                    this.comando.Parameters.AddWithValue("@edad",p.Edad);
+                    this.comando.Parameters.AddWithValue("@sexo",p.Sexo);
+                    this.comando.Parameters.AddWithValue("@dia",p.DiaCobrado);
+                    this.comando.Parameters.AddWithValue("@servicio",p.Servicio);
+                    this.comando.Parameters.AddWithValue("@activo",true);
                     this.conexion.Open();
                     this.comando.ExecuteNonQuery();
                 
@@ -59,11 +59,11 @@ namespace Entidades
         {
             try
             { 
-                string query = "UPDATE PERSONAS SET ACTIVO=@ACTIVO, DIA_COBRADO=@DIA WHERE DNI=@DNI";
+                string query = "update PersonasGym set activo=@activo, diaCobrado=@dia where dni=@dni";
                 this.comando = new(query, this.conexion);
-                this.comando.Parameters.AddWithValue("@ACTIVO", activo);
-                this.comando.Parameters.AddWithValue("@DNI", p.Dni);
-                this.comando.Parameters.AddWithValue("@DIA", p.DiaCobrado);
+                this.comando.Parameters.AddWithValue("@activo", activo);
+                this.comando.Parameters.AddWithValue("@dni", p.Dni);
+                this.comando.Parameters.AddWithValue("@dia", p.DiaCobrado);
 
                 this.conexion.Open();
                 this.comando.ExecuteNonQuery();
@@ -86,20 +86,20 @@ namespace Entidades
             List<Persona> lista = new();
             try
             {
-                string query = "SELECT DNI,NOMBRE_COMPLETO,EDAD,SEXO,DIA_COBRADO,SERVICIO FROM PERSONAS WHERE ACTIVO=@ACTIVO";
+                string query = "select dni,nombreCompleto,edad,sexo,diaCobrado,servicio from PersonasGym where activo=@activo";
                 this.comando = new(query, this.conexion);
-                this.comando.Parameters.AddWithValue("@ACTIVO", activo);
+                this.comando.Parameters.AddWithValue("@activo", activo);
                 this.conexion.Open();
                 this.lector = comando.ExecuteReader();
 
                 while (lector.Read())
                 {
-                    int dni = int.Parse(lector["DNI"].ToString());
-                    string nombre = lector["NOMBRE_COMPLETO"].ToString();
-                    int edad = int.Parse(lector["EDAD"].ToString());
-                    int sexo = int.Parse(lector["SEXO"].ToString());
+                    int dni = int.Parse(lector["dni"].ToString());
+                    string nombre = lector["nombreCompleto"].ToString();
+                    int edad = int.Parse(lector["edad"].ToString());
+                    int sexo = int.Parse(lector["sexo"].ToString());
                     DateTime diaCobrado = lector.GetDateTime(4);
-                    int servicio = int.Parse(lector["SERVICIO"].ToString());
+                    int servicio = int.Parse(lector["servicio"].ToString());
 
                     lista.Add(new Persona(nombre, dni, edad, (eSexo)sexo, diaCobrado, (eServicio)servicio));
                 }
